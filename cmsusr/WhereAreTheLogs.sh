@@ -1,0 +1,57 @@
+#!bin/bash
+
+export home=`pwd`
+echo "you are in $home"
+
+echo "===== /var/log at pcrpct01 ====="
+ssh piet@pcrpct01 'ls -lrth /var/log' | egrep "rpc" | egrep "worker" | egrep ".log" | tail -n 20
+echo "================================"
+echo ""
+echo "===== /var/log at pcrpct02 ====="
+ssh piet@pcrpct02 'ls -lrth /var/log' | egrep "rpc" | egrep "worker" | egrep ".log" | tail -n 20
+echo "================================"
+echo ""
+echo "===== /var/log at pcrpct03 ====="
+ssh piet@pcrpct03 'ls -lrth /var/log' | egrep "rpc" | egrep "worker" | egrep ".log" | tail -n 20
+echo "================================"
+echo ""
+echo "===== /var/log at pcrpct04 ====="
+ssh piet@pcrpct04 'ls -lrth /var/log' | egrep "rpc" | egrep "worker" | egrep ".log" | tail -n 20
+echo "================================"
+echo ""
+echo "===== /var/log at pcrpct05 ====="
+ssh piet@pcrpct05 'ls -lrth /var/log' | egrep "rpc" | egrep "worker" | egrep ".log" | tail -n 20
+echo "================================"
+
+echo ""
+echo ""
+echo "----- Trigger System Logs -----------------------------------------"
+echo "-------------------------------------------------------------------"
+echo "-                                                                 -"
+echo "- for Trigger Crates TC 00-01-02 ::                               -"
+echo "-------------------------------------------------------------------"
+echo "- ssh piet@pcrpct01                                               -"
+echo "- ls -lrth /var/log                                               -"
+echo "-                                                                 -"
+echo "- for Trigger Crates TC 03-04-11 ::                               -"
+echo "-------------------------------------------------------------------"
+echo "- ssh piet@pcrpct02                                               -"
+echo "- ls -lrth /var/log                                               -"
+echo "-                                                                 -"
+echo "- for Trigger Crates TC 05-09-10 ::                               -"
+echo "-------------------------------------------------------------------"
+echo "- ssh piet@pcrpct04                                               -"
+echo "- ls -lrth /var/log                                               -"
+echo "-                                                                 -"
+echo "- for Trigger Crates TC 06-07-08 ::                               -"
+echo "-------------------------------------------------------------------"
+echo "- ssh piet@pcrpct05                                               -"
+echo "- ls -lrth /var/log                                               -"
+echo "-                                                                 -"
+echo "- for Link Boards and RPC Supervisor ::                           -"
+echo "-------------------------------------------------------------------"
+echo "- ssh piet@pcrpct03                                               -"
+echo "- ls -lrth /var/log                                               -"
+echo "-------------------------------------------------------------------"
+echo ""
+echo ""
