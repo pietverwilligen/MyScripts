@@ -1,3 +1,13 @@
 #!/bin/bash
-echo "ls -lrth  /nfshome0/anton" 
+
+
+echo ""
+echo "-------------------------------------------------------------------"
+echo "- access to TELNET for RPC LV and HV                              -"
+echo "-------------------------------------------------------------------"
+echo "--- login: admin --- password: rpcadmin                         ---"
+echo "-------------------------------------------------------------------"
+echo "- ls -lrth  /nfshome0/anton" 
 lt  /nfshome0/anton
+echo "-------------------------------------------------------------------"
+echo ""

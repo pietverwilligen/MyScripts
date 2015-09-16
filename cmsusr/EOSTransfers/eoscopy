@@ -1,0 +1,56 @@
+#!/bin/bash
+
+SOURCE=$1
+DESTINATION=$2
+
+if [[ -z "$SOURCE" || -z "$DESTINATION" ]]; then
+    cat <<EOF
+eoscp.sh - Wrapper around xrdcp to copy files from the .cms to CMS EOS.
+
+USAGE: eoscp.sh <source_file> <destination_file>
+
+EXAMPLE USAGE:
+
+    eoscp.sh /tmp/dummy_file.dat /store/user/veverka/test/dummy_file.dat
+
+Expected output:
+
+    xrdcp /tmp/dummy_file.dat root://eoscms.cern.ch//eos/cms/store/user/veverka/test/dummy_file.dat
+    [xrootd] Total 2.44 MB  |====================| 100.00 % [853.3 MB/s]
+
+Script attemtps to ensure that the xrdcp command a kerberos ticket in
+the CERN.CH realm are available.  It gives hints on how to make these happen.
+
+Please report bugs and suggestions to jan.veverka@cern.ch.
+
+EOF
+    exit 1
+fi
+
+## Make sure we have xrdcopy setup
+if ! which xrdcopy >& /dev/null; then
+    echo "$0 ERROR: xrdcp command not found!"
+    echo "You can set up the xrdcp command in Bash using these commands:\n"
+    echo "    export SCRAM_ARCH=slc5_amd64_gcc462"
+    echo "    source ~cmssw2/cmsset_default.sh"
+    echo "    pushd ~veverka/cmssw/CMSSW_5_2_6/src/ && cmsenv && popd"
+    exit 1
+fi
+
+if ! klist -s5 >& /dev/null ||\
+   ! (klist -5 | grep 'Default principal' | grep -q 'CERN.CH'); then
+    echo "Obtaining your CERN.CH Kerberos ticket ..."
+    echo "Enter your CERN.CH user name: "
+    read USER
+    echo "Using configuration /nfshome0/veverka/daq/eos/krb5.conf.srv-C2C03-22"
+    echo
+    echo "    export KRB5_CONFIG=/nfshome0/veverka/daq/eos/krb5.conf.srv-C2C03-22"
+    export KRB5_CONFIG=/nfshome0/veverka/daq/eos/krb5.conf.srv-C2C03-22
+    echo "    kinit $USER@CERN.CH"
+    echo
+    kinit $USER@CERN.CH || exit $?
+fi
+
+ABS_DEST=root://eoscms.cern.ch//eos/cms$DESTINATION
+echo "xrdcopy --cksum adler32 $SOURCE $ABS_DEST"
+xrdcopy --cksum adler32 $SOURCE $ABS_DEST
